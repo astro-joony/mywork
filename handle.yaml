@@ -1,0 +1,30 @@
+---
+- name: handler test 1
+  hosts: db
+  gather_facts: false
+  tasks:
+    - name: install web pkg
+      dnf:
+        name: nginx
+        state: latest
+
+
+    - name: change default webpage
+      copy:
+        content: "hello 3 Day"
+        dest: /usr/share/nginx/html/index.html
+
+
+    - name: dummy task 1
+      debug:
+        msg: good
+    - name: dummy task 2
+      debug:
+        msg: day
+   
+  handlers:
+    - name: restart_web
+      service:
+        name: nginx
+        state: restarted
+        enabled: true

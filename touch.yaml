@@ -1,0 +1,28 @@
+---
+- name: block & rescue example
+  hosts: servera.test.com
+  gather_facts: no
+  vars:
+    web_pkg: nginx
+    ftp_pkg: vsftpd
+    db_pkg: mariadb-server
+  tasks:
+    - name: install APM
+      block:
+        - name: install "{{ web_pkg }}"
+          dnf:
+            name: "{{ web_pkg }}"
+            state: present
+     
+      rescue:
+        - name: install "{{ ftp_pkg }}"
+          dnf:
+            name: "{{ ftp_pkg }}"
+            state: latest
+
+
+      always:
+        - name: install "{{ db_pkg }}"
+          dnf:
+            name: "{{ db_pkg }}"
+            state: present
